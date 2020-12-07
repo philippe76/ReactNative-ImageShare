@@ -1,11 +1,17 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Platform } from 'react-native';
 import logo from './assets/logo.png';
 import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
-import uploadToAnonymousFilesAsync from 'anonymous-files'
+import uploadToAnonymousFilesAsync from 'anonymous-files';
+import * as SplashScreen from 'expo-splash-screen' 
+
+
 
 export default function App() {
+
+  SplashScreen.preventAutoHideAsync();
+  setTimeout(SplashScreen.hideAsync, 5000);
 
   const [selectedImage, setSelectedImage] = useState(null)
 
