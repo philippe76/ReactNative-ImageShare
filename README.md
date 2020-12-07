@@ -10,10 +10,9 @@
 
 <br/>
 
+<div style="text-align: right"> Thx to<a href= 'https://docs.expo.io/tutorial/planning/'> Expo.io Tutorial 😉 </a></div>
+
+<br/>
+<br/>
+
 <img src='./assets/sharingPhoto.PNG'>
-
-<br/>
-<br/>
-<br/>
-
-Thx to [Expo.io Tutorial](https://docs.expo.io/tutorial/planning/) 😉
