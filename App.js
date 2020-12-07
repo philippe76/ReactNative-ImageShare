@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Platform } from 'react-native';
 import logo from './assets/logo.png';
-import * as ImagePicker from 'expo-image-picker'
+import * as ImagePicker from 'expo-image-picker';
+import * as Sharing from 'expo-sharing';
+import uploadToAnonymousFilesAsync from 'anonymous-files'
 
 export default function App() {
 
@@ -14,13 +16,29 @@ export default function App() {
       alert('Permission to access camera roll is required!')
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-  
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();  
     if (pickerResult.cancelled) {
       return
     }
 
-    setSelectedImage({localUri: pickerResult.uri})
+    if (Platform.OS === 'web') {
+      let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
+      setSelectedImage({localUri: pickerResult.uri, remoteUri})
+    }
+    else {
+      setSelectedImage({localUri: pickerResult.uri, remoteUri: null})
+    }
+
+
+  }
+
+  let openShareDialogAsync = async () => {
+    if(!await Sharing.isAvailableAsync()) {
+      alert(`The image is available for sharing at: ${selectedImage.remoteUri}`);
+      return
+    }
+
+    await Sharing.shareAsync(selectedImage.localUri)
   }
 
 
@@ -28,9 +46,14 @@ export default function App() {
     return (
       <View style={styles.container}>
         <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail}/>
+        <TouchableOpacity onPress={openShareDialogAsync} style={styles.button}>
+          <Text style={styles.buttonText}>Share this photo</Text>
+        </TouchableOpacity>
       </View>
     )
   }
+
+
 
   return (
     <View style={styles.container}>
